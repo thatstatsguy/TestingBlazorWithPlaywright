@@ -1,8 +1,14 @@
+using Microsoft.Playwright;
+
 namespace UnitTests;
+
+/// <summary>
+/// Leaving this in here as this is what comes as part of the playwright template
+/// </summary>
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class Tests : PageTest
+public class Assertions : PageTest
 {
     [Test]
     public async Task HomepageHasPlaywrightInTitleAndGetStartedLinkLinkingtoTheIntroPage()
@@ -16,7 +22,11 @@ public class Tests : PageTest
         var getStarted = Page.Locator("text=Get Started");
 
         // Expect an attribute "to be strictly equal" to the value.
-        await Expect(getStarted).ToHaveAttributeAsync("href", "/docs/intro");
+        // Custom timeout of 30 seconds has been added here to show how the length of time to wait can be adjusted
+        await Expect(getStarted).ToHaveAttributeAsync(
+            "href",
+            "/docs/intro", 
+            new LocatorAssertionsToHaveAttributeOptions(){Timeout = 30_000});
 
         // Click the get started link.
         await getStarted.ClickAsync();
